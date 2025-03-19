@@ -1,0 +1,8 @@
+@theme {
+    --color-primary: #006275;   /* Azul vibrante para destacar */
+    --color-secondary: #008a77; /* Azul más oscuro para profundidad */
+    --color-accent: #92E1D5;    /* Amarillo dorado para llamados a la acción */
+    --color-neutral: #F3F2F6;   /* Gris claro para fondos limpios */
+    --color-text: #212121;      /* Negro suave para textos */
+    --color-text-grey: #212121;      /* Negro suave para textos */
+}
