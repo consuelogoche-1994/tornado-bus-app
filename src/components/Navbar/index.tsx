@@ -47,7 +47,7 @@ const Navbar = () => {
             </li>
             <li>
               <NavLink to="/my-account" className={({ isActive }) => (isActive ? activeStyle : undefined)}>
-                <div className="flex gap-1 p-1 rounded-md hover:bg-accent/30">
+                <div className="flex gap-1 p-1 rounded-md hover:bg-tertiary/30">
                   <UserIcon className="h-6 w-6 text-base text-primary" />
                   <span>Iniciar sesión</span>
                 </div>
