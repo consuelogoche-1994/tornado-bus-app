@@ -1,11 +1,9 @@
-// import Layout from '../../Components/Layout'
-
 import Layout from '../../components/Layout'
 
 function Home() {
 
   return (
-    <Layout showBanner={false}>
+    <Layout showBanner={true}>
         Home
     </Layout>
   )

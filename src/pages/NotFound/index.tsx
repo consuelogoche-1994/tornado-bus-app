@@ -3,8 +3,11 @@ import Layout from '../../components/Layout'
 function NotFound() {
 
   return (
-    <Layout showBanner={true}>
+    <Layout>
+      <div className='pt-16'>
         NotFound
+      </div>
+
     </Layout>
   )
 }
