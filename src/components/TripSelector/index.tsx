@@ -12,9 +12,12 @@ function TripSelector() {
 
   const { citiesOrigin, fetchCitiesOrigin } = useCitiesOrigin();
   const { citiesDestinity, fetchCitiesDestinity } = useCitiesDestinity();
+
   const [ selectedCityOrigin, setSelectedCityOrigin] = useState<number | null>(null);
   const [ initValidations, setInitValidations] = useState<Boolean>(false);
   
+  // console.log(departureTravels??"no cargo");
+
   const handleInputChangeOrigin = (inputValue?: string) => {
     fetchCitiesOrigin(inputValue??"");
   };
@@ -130,6 +133,9 @@ function TripSelector() {
               <Button type="submit" onClick={()=> {setInitValidations(true)}} className="w-full md:w-[80%]">
                 Buscar
               </Button>
+              <div>
+                {/* {departureTravels??"no cargo"} */}
+              </div>
             </div>
           </div>
         </Form>
