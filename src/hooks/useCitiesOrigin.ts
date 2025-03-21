@@ -1,10 +1,10 @@
 import { useContext } from "react";
 import { CityOriginContext } from "../context/CityOriginContext";
 
-export const useCities = () => {
+export const useCitiesOrigin = () => {
   const context = useContext(CityOriginContext);
   if (!context) {
-    throw new Error("useCities debe usarse dentro de un CityProvider");
+    throw new Error("useCitiesOrigin debe usarse dentro de un CityProvider");
   }
   return context;
 };

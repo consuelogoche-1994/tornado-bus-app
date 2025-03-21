@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Check, ChevronsUpDown } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import {
@@ -13,15 +13,21 @@ import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover
 import { City } from "../../types/cities";
 
 interface CityTypeProps {
+  id: string;
   cities: City[];
   onSelected: (cityID: number) => void;
   onChange: (inputValue: string) => void;
+  dependencyReset: number | null;
 }
 
-function SearchSelect({ cities, onSelected, onChange }: CityTypeProps) {
+function SearchSelect({ id, cities, onSelected, onChange, dependencyReset }: CityTypeProps) {
   const [open, setOpen] = useState<boolean>(false);
   const [citySelected, setCitySelected] = useState<number | null>(null);
   const [inputValue, setInputValue] = useState<string>("");
+
+  useEffect(() => {
+    if(dependencyReset) setCitySelected(null);
+  }, [dependencyReset]);
 
   /**
    * Updates the selected city state and triggers the onSelected callback.
@@ -46,8 +52,8 @@ function SearchSelect({ cities, onSelected, onChange }: CityTypeProps) {
   return (
     <div className="flex flex-col text-start text-text">
       {/* Label */}
-      <label htmlFor="city-select" className="text-sm font-light text-gray-500 px-3 pt-1">
-        Ciudad de origen
+      <label htmlFor={`${id}`} className="text-sm font-light text-gray-500 px-3 pt-1">
+        {id=="origin" ? "Ciudad de origen":"Ciudad de destino"}
       </label>
 
       {/* Combobox */}
@@ -55,18 +61,20 @@ function SearchSelect({ cities, onSelected, onChange }: CityTypeProps) {
         <PopoverTrigger asChild>
           <span>
             <Button
-              id="city-select"
+              id={`${id}`}
               variant="ghost"
               className="w-full justify-between text-left font-normal"
               role="combobox"
               aria-expanded={open}
             >
-              {citySelected ? cities.find((city) => city.id === citySelected)?.name : "Seleccionar ciudad"}
+              <span className="truncate block w-full">
+                {citySelected ? cities.find((city) => city.id === citySelected)?.name : "Seleccionar ciudad"}
+              </span>
               <ChevronsUpDown className="opacity-50" />
             </Button>
           </span>
         </PopoverTrigger>
-        <PopoverContent className="w-full p-0 border-gray-300">
+        <PopoverContent className="w-[80vw] md:w-90 lg:w-70 p-0 border-gray-300">
           <Command>
             <CommandInput 
               placeholder="Buscar ciudad..." 
