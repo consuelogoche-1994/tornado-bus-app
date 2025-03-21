@@ -15,8 +15,6 @@ function TripSelector() {
 
   const [ selectedCityOrigin, setSelectedCityOrigin] = useState<number | null>(null);
   const [ initValidations, setInitValidations] = useState<Boolean>(false);
-  
-  // console.log(departureTravels??"no cargo");
 
   const handleInputChangeOrigin = (inputValue?: string) => {
     fetchCitiesOrigin(inputValue??"");
@@ -37,8 +35,6 @@ function TripSelector() {
   };
 
   const [date, setDate] = useState<Date | undefined>();
-
-  console.log(date);
 
   const validationSchema = Yup.object().shape({
     passengers: Yup.number()
@@ -133,9 +129,6 @@ function TripSelector() {
               <Button type="submit" onClick={()=> {setInitValidations(true)}} className="w-full md:w-[80%]">
                 Buscar
               </Button>
-              <div>
-                {/* {departureTravels??"no cargo"} */}
-              </div>
             </div>
           </div>
         </Form>
