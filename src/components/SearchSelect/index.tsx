@@ -25,43 +25,52 @@ const SearchSelect: React.FC = () => {
 
   return (
     <div className="flex flex-col text-start text-text">
-    {/* Label */}
-    <label htmlFor="city-select" className="text-sm font-light text-gray-500 px-3 pt-1">
-      Ciudad de origen
-    </label>
+      {/* Label */}
+      <label htmlFor="city-select" className="text-sm font-light text-gray-500 px-3 pt-1">
+        Ciudad de origen
+      </label>
 
-    {/* Combobox */}
-        <Popover open={open} onOpenChange={setOpen}>
+      {/* Combobox */}
+      <Popover open={open} onOpenChange={setOpen}>
         <PopoverTrigger asChild>
-            <Button id="city-select" variant="ghost" className="w-full justify-between text-left font-normal" role="combobox" aria-expanded={open}>
-            {value ? cities.find((city) => city.value === value)?.label : "Seleccionar ciudad"}
-            <ChevronsUpDown className="opacity-50" />
+          {/* 🔹 Se envuelve el Button en un span para evitar el error de ref */}
+          <span>
+            <Button
+              id="city-select"
+              variant="ghost"
+              className="w-full justify-between text-left font-normal"
+              role="combobox"
+              aria-expanded={open}
+            >
+              {value ? cities.find((city) => city.value === value)?.label : "Seleccionar ciudad"}
+              <ChevronsUpDown className="opacity-50" />
             </Button>
+          </span>
         </PopoverTrigger>
         <PopoverContent className="w-full p-0 border-gray-300">
-            <Command>
+          <Command>
             <CommandInput placeholder="Buscar ciudad..." className="h-9" />
             <CommandList>
-                <CommandEmpty>No se encontraron ciudades.</CommandEmpty>
-                <CommandGroup>
+              <CommandEmpty>No se encontraron ciudades.</CommandEmpty>
+              <CommandGroup>
                 {cities.map((city) => (
-                    <CommandItem
+                  <CommandItem
                     key={city.value}
-                    value={city.value}
+                    data-value={city.value} // 🔹 Se usa data-value en lugar de value
                     onSelect={() => {
-                        setValue(city.value);
-                        setOpen(false);
+                      setValue(city.value);
+                      setOpen(false);
                     }}
-                    >
+                  >
                     {city.label}
                     <Check className={`ml-auto ${value === city.value ? "opacity-100" : "opacity-0"}`} />
-                    </CommandItem>
+                  </CommandItem>
                 ))}
-                </CommandGroup>
+              </CommandGroup>
             </CommandList>
-            </Command>
+          </Command>
         </PopoverContent>
-        </Popover>
+      </Popover>
     </div>
   );
 };

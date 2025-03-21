@@ -14,20 +14,22 @@ const DatePicker = ({ value, onChange }: PropsWithChildren<DatePickerProps>) => 
   return (
     <div className="flex flex-col text-start text-text">
       {/* Label */}
-      <label htmlFor="city-select" className="text-sm font-light text-gray-500 px-3 pt-1">
+      <label htmlFor="date-picker" className="text-sm font-light text-gray-500 px-3 pt-1">
         Fecha
       </label>
-    <Popover>
-      <PopoverTrigger asChild>
-        <Button variant="ghost" className="w-full justify-start text-left font-normal">
-          <CalendarIcon className="mr-2 h-4 w-4" />
-          {value ? format(value, "PPP") : <span>Seleccionar Fecha</span>}
-        </Button>
-      </PopoverTrigger>
-      <PopoverContent className="w-auto p-0 border-gray-300">
+      <Popover>
+        <PopoverTrigger asChild>
+          <span>
+          <Button id="date-picker" variant="ghost" className="w-full justify-start text-left font-normal">
+            <CalendarIcon className="mr-2 h-4 w-4" />
+            {value ? format(value, "PPP") : <span>Seleccionar Fecha</span>}
+          </Button>
+          </span>
+        </PopoverTrigger>
+        <PopoverContent className="w-auto p-0 border-gray-300">
         <Calendar mode="single" selected={value} onSelect={onChange} initialFocus />
-      </PopoverContent>
-    </Popover>
+        </PopoverContent>
+      </Popover>
     </div>
   );
 };
