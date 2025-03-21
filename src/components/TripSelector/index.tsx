@@ -19,10 +19,12 @@ function TripSelector() {
     fetchCitiesOrigin(inputValue??"");
   };
 
-  const handleUpdateCitiesDestinity = (cityInitId: number) => {
+  const handleUpdateCitiesDestinity = (cityInitId: number | null) => {
     setSelectedCityOrigin(cityInitId);
-    fetchCitiesDestinity(cityInitId, "");
-  };  
+    if(cityInitId){
+      fetchCitiesDestinity(cityInitId, "");
+    }
+  };
 
   const handleInputChangeDestinity = (inputValue?: string) => {
     const value = inputValue ?? "";
@@ -33,6 +35,8 @@ function TripSelector() {
 
   const [date, setDate] = useState<Date | undefined>();
 
+  console.log(date);
+
   const validationSchema = Yup.object().shape({
     passengers: Yup.number()
       .min(1, "Mínimo un pasajero")
@@ -41,11 +45,15 @@ function TripSelector() {
       .required("Debe seleccionar una ciudad de origen"),
     cityDestinity: Yup.number()
       .required("Debe seleccionar una ciudad de origen"),
+    tripDate: Yup.date()
+      .min(new Date(), "La fecha no puede ser anterior a hoy")
+      .required("Debe seleccionar una fecha"),
+  
   });
 
   return (
     <Formik
-      initialValues={{ passengers: 1 , cityOrigin: null, cityDestinity: null}}
+      initialValues={{ passengers: 1 , cityOrigin: null, cityDestinity: null, tripDate: null}}
       validationSchema={validationSchema}
       onSubmit={(values) => {
         console.log("Formulario enviado con valores:", values);
@@ -89,8 +97,21 @@ function TripSelector() {
                 />
               }
             </div>
-            <div className="flex-1 p-1 text-center rounded-md border border-gray-300 md:col-span-2 lg:col-span-1">
-              <DatePicker value={date} onChange={setDate} />
+            <div className="flex-1 p-1 rounded-md border border-gray-300 md:col-span-2 lg:col-span-1">
+              <DatePicker 
+                value={date} 
+                onChange={(date) => {
+                  setDate(date);
+                  setFieldValue("tripDate", date)}
+                } 
+              />
+              {initValidations &&
+                <ErrorMessage
+                  name="tripDate"
+                  component="div"
+                  className="text-red-500 text-[10px] pl-3"
+                />
+              }
             </div>
             <div className="flex-1 p-1 rounded-md border border-gray-300 md:col-span-2 lg:col-span-1">
               <PassengerType

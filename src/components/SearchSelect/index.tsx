@@ -15,7 +15,7 @@ import { City } from "../../types/cities";
 interface CityTypeProps {
   id: string;
   cities: City[];
-  onSelected: (cityID: number) => void;
+  onSelected: (cityID: number | null) => void;
   onChange: (inputValue: string) => void;
   dependencyReset: number | null;
 }
@@ -26,7 +26,10 @@ function SearchSelect({ id, cities, onSelected, onChange, dependencyReset }: Cit
   const [inputValue, setInputValue] = useState<string>("");
 
   useEffect(() => {
-    if(dependencyReset) setCitySelected(null);
+    if(dependencyReset) {
+      onSelected(null);
+      setCitySelected(null);
+    };
   }, [dependencyReset]);
 
   /**
