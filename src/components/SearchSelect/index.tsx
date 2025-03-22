@@ -14,7 +14,7 @@ import { City } from "../../types/cities";
 
 interface CityTypeProps {
   id: string;
-  value: Number | null;
+  value: number | null;
   cities: City[];
   onSelected: (cityID: number | null) => void;
   onChange: (inputValue: string) => void;
@@ -23,15 +23,15 @@ interface CityTypeProps {
 
 function SearchSelect({ id, value, cities, onSelected, onChange, dependencyReset }: CityTypeProps) {
   const [open, setOpen] = useState<boolean>(false);
-  const [citySelected, setCitySelected] = useState<Number | null>(null);
+  const [citySelected, setCitySelected] = useState<number | null>(null);
   const [inputValue, setInputValue] = useState<string >("");
 
   useEffect(() => {
-    if(dependencyReset) {
+    if(dependencyReset && !value) {
       onSelected(null);
       setCitySelected(null);
     };
-  }, [dependencyReset]);
+  }, [dependencyReset, value]);
 
   useEffect(() => {
     if(value) {
@@ -75,6 +75,7 @@ function SearchSelect({ id, value, cities, onSelected, onChange, dependencyReset
               variant="ghost"
               className="w-full justify-between text-left font-normal"
               role="combobox"
+              type="button"
               aria-expanded={open}
             >
               <span className="truncate block w-full">

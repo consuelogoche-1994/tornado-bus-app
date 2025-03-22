@@ -1,3 +1,4 @@
+import { useNavigate } from 'react-router-dom';
 import { Button } from "@/components/ui/button";
 import SearchSelect from "../SearchSelect";
 import DatePicker from "../DatePicker";
@@ -6,16 +7,19 @@ import { useState, useEffect } from "react";
 import { useCitiesOrigin } from "../../hooks/useCitiesOrigin";
 import { useCitiesDestinity } from "../../hooks/useCitiesDestinity";
 import { useTripDetails } from "../../hooks/useTripDetails";
+import { useDepartureTravel } from "../../hooks/useDepartureTravel";
 
-import { PassengerCount } from "../../types/tripDetails";
+import { PassengerCount, TripDetail } from "../../types/tripDetails";
 import { Formik, Form, ErrorMessage } from "formik";
 import * as Yup from "yup";
 
 function TripSelector() {
 
+  const navigate = useNavigate();
   const { citiesOrigin, fetchCitiesOrigin } = useCitiesOrigin();
   const { citiesDestinity, fetchCitiesDestinity } = useCitiesDestinity();
   const { tripDetail, setTripDetail } = useTripDetails();
+  const { fetchDepartureTravels } = useDepartureTravel();
   const [ selectedcityInitID, setSelectedcityInitID] = useState<number | null>(null);
   const [ selectedcityEndID, setSelectedcityEndID] = useState<number | null>(null);
   const [ passenger, setPassenger] = useState<PassengerCount>({
@@ -37,8 +41,7 @@ function TripSelector() {
     if (tripDetail.cityEndID) {
       setSelectedcityEndID(tripDetail.cityEndID);
     }
-    console.log(tripDetail);
-    if (passenger) {
+    if (tripDetail.passenger) {
       setPassenger(tripDetail.passenger);
     }
   }, [tripDetail]);
@@ -72,28 +75,44 @@ function TripSelector() {
     cityEndID: Yup.number()
       .required("Debe seleccionar una ciudad de origen"),
     date: Yup.date()
-      .min(new Date(), "La fecha no puede ser anterior a hoy")
+      .min(new Date(new Date().setHours(0, 0, 0, 0)), "La fecha no puede ser anterior a hoy")
       .required("Debe seleccionar una fecha"),
   
   });
 
+  const handleSubmit = (values: TripDetail) => {
+    const filters = {
+      limit: 25,
+      page: 1,
+      filters: {
+        date: values.date?.toISOString().split('T')[0] || '',
+        city: [values.cityInitID ?? 0, values.cityEndID ?? 0],
+        passengerNumber: values.passenger.total,
+        passengerDisabilityNumber: 0,
+        orderTravel: 1060,
+        orderMaxMinTravel: 1,
+        isPoint: false,
+        currencyID: 567,
+        externalInitId: 0,
+        externalEndId: 0,
+        routeID: null,
+        _rowId: null
+      }
+    };
+    setTripDetail(values);
+    fetchDepartureTravels(filters);
+    if (location.pathname !== "/trips") {
+      navigate("/trips");
+    }
+  };
+
   return (
     <Formik
-      initialValues={{ 
-        passenger: {
-          adulto: 1,
-          niño: 0,
-          senior: 0,
-          total: 1,
-        }, 
-        cityInitID: null, 
-        cityEndID: null, 
-        date: null
-      }}
+      initialValues={tripDetail}
+      enableReinitialize={true}
       validationSchema={validationSchema}
       onSubmit={(values) => {
-        console.log("Formulario enviado con valores:", values);
-        setTripDetail(values);
+        handleSubmit(values);
       }}
     >
       {({ setFieldValue }) => (
@@ -159,7 +178,7 @@ function TripSelector() {
               />
               {initValidations &&
                 <ErrorMessage
-                  name="passenger"
+                  name="passenger.total"
                   component="div"
                   className="text-red-500 text-[10px] pl-4"
                 />

@@ -53,7 +53,7 @@ function PassengerType({ value, onChange }: PassengerTypeProps) {
         <Popover open={open} onOpenChange={setOpen}>
           <PopoverTrigger asChild>
             <span>
-              <Button variant="ghost" className="w-full justify-start text-left font-normal">
+              <Button variant="ghost" type="button" className="w-full justify-start text-left font-normal">
                 <UserIcon className="h-6 w-6" />
                 {passengerCounts.total} {passengerCounts.total === 1 ? "Pasajero" : "Pasajeros"}
               </Button>
