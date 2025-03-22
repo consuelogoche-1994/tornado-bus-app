@@ -2,9 +2,12 @@ import { Button } from "@/components/ui/button";
 import SearchSelect from "../SearchSelect";
 import DatePicker from "../DatePicker";
 import PassengerType from "../PassengerType";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useCitiesOrigin } from "../../hooks/useCitiesOrigin";
 import { useCitiesDestinity } from "../../hooks/useCitiesDestinity";
+import { useTripDetails } from "../../hooks/useTripDetails";
+
+import { PassengerCount } from "../../types/tripDetails";
 import { Formik, Form, ErrorMessage } from "formik";
 import * as Yup from "yup";
 
@@ -12,16 +15,40 @@ function TripSelector() {
 
   const { citiesOrigin, fetchCitiesOrigin } = useCitiesOrigin();
   const { citiesDestinity, fetchCitiesDestinity } = useCitiesDestinity();
-
-  const [ selectedCityOrigin, setSelectedCityOrigin] = useState<number | null>(null);
+  const { tripDetail, setTripDetail } = useTripDetails();
+  const [ selectedcityInitID, setSelectedcityInitID] = useState<number | null>(null);
+  const [ selectedcityEndID, setSelectedcityEndID] = useState<number | null>(null);
+  const [ passenger, setPassenger] = useState<PassengerCount>({
+    adulto: 1,
+    niño: 0,
+    senior: 0,
+    total: 1,
+  });
   const [ initValidations, setInitValidations] = useState<Boolean>(false);
+  const [date, setDate] = useState<Date | undefined>();
+
+  useEffect(() => {
+    if (tripDetail.date) {
+      setDate(tripDetail.date);
+    }
+    if (tripDetail.cityInitID) {
+      setSelectedcityInitID(tripDetail.cityInitID);
+    }
+    if (tripDetail.cityEndID) {
+      setSelectedcityEndID(tripDetail.cityEndID);
+    }
+    console.log(tripDetail);
+    if (passenger) {
+      setPassenger(tripDetail.passenger);
+    }
+  }, [tripDetail]);
 
   const handleInputChangeOrigin = (inputValue?: string) => {
     fetchCitiesOrigin(inputValue??"");
   };
 
   const handleUpdateCitiesDestinity = (cityInitId: number | null) => {
-    setSelectedCityOrigin(cityInitId);
+    setSelectedcityInitID(cityInitId);
     if(cityInitId){
       fetchCitiesDestinity(cityInitId, "");
     }
@@ -29,22 +56,22 @@ function TripSelector() {
 
   const handleInputChangeDestinity = (inputValue?: string) => {
     const value = inputValue ?? "";
-    if (selectedCityOrigin) {
-      fetchCitiesDestinity(selectedCityOrigin, value);
+    if (selectedcityInitID) {
+      fetchCitiesDestinity(selectedcityInitID, value);
     }
   };
 
-  const [date, setDate] = useState<Date | undefined>();
-
   const validationSchema = Yup.object().shape({
-    passengers: Yup.number()
-      .min(1, "Mínimo un pasajero")
-      .required("Mínimo un pasajero"),
-    cityOrigin: Yup.number()
+    passenger: Yup.object().shape({
+      total: Yup.number()
+        .min(1, "Mínimo un pasajero")
+        .required("Mínimo un pasajero"),
+    }),
+    cityInitID: Yup.number()
       .required("Debe seleccionar una ciudad de origen"),
-    cityDestinity: Yup.number()
+    cityEndID: Yup.number()
       .required("Debe seleccionar una ciudad de origen"),
-    tripDate: Yup.date()
+    date: Yup.date()
       .min(new Date(), "La fecha no puede ser anterior a hoy")
       .required("Debe seleccionar una fecha"),
   
@@ -52,29 +79,41 @@ function TripSelector() {
 
   return (
     <Formik
-      initialValues={{ passengers: 1 , cityOrigin: null, cityDestinity: null, tripDate: null}}
+      initialValues={{ 
+        passenger: {
+          adulto: 1,
+          niño: 0,
+          senior: 0,
+          total: 1,
+        }, 
+        cityInitID: null, 
+        cityEndID: null, 
+        date: null
+      }}
       validationSchema={validationSchema}
       onSubmit={(values) => {
         console.log("Formulario enviado con valores:", values);
+        setTripDetail(values);
       }}
     >
-      {({ setFieldValue, values }) => (
+      {({ setFieldValue }) => (
         <Form>
           <div className="flex flex-col gap-2 rounded-lg md:grid md:grid-cols-6 lg:grid-cols-5">
             <div className="flex-1 p-1 rounded-md border border-gray-300 md:col-span-3 lg:col-span-1">
               <SearchSelect
                 id="origin"
+                value={selectedcityInitID}
                 cities={citiesOrigin}
                 onSelected={(cityId) => {
-                  setFieldValue("cityOrigin", cityId);
-                  handleUpdateCitiesDestinity(cityId); // Actualiza el estado de origen
+                  setFieldValue("cityInitID", cityId);
+                  handleUpdateCitiesDestinity(cityId);
                 }}
                 onChange={handleInputChangeOrigin}
                 dependencyReset={null}
               />
               {initValidations &&
                 <ErrorMessage
-                  name="cityOrigin"
+                  name="cityInitID"
                   component="div"
                   className="text-red-500 text-[10px] pl-3"
                 />
@@ -83,14 +122,15 @@ function TripSelector() {
             <div className="flex-1 p-1 rounded-md border border-gray-300 md:col-span-3 lg:col-span-1">
               <SearchSelect
                 id="destinity"
+                value={selectedcityEndID}
                 cities={citiesDestinity}
-                onSelected={(cityId) => setFieldValue("cityDestinity", cityId)}
+                onSelected={(cityId) => setFieldValue("cityEndID", cityId)}
                 onChange={handleInputChangeDestinity}
-                dependencyReset={selectedCityOrigin}
+                dependencyReset={selectedcityInitID}
               />
               {initValidations &&
                 <ErrorMessage
-                  name="cityDestinity"
+                  name="cityEndID"
                   component="div"
                   className="text-red-500 text-[10px] pl-3"
                 />
@@ -101,12 +141,12 @@ function TripSelector() {
                 value={date} 
                 onChange={(date) => {
                   setDate(date);
-                  setFieldValue("tripDate", date)}
+                  setFieldValue("date", date)}
                 } 
               />
               {initValidations &&
                 <ErrorMessage
-                  name="tripDate"
+                  name="date"
                   component="div"
                   className="text-red-500 text-[10px] pl-3"
                 />
@@ -114,12 +154,12 @@ function TripSelector() {
             </div>
             <div className="flex-1 p-1 rounded-md border border-gray-300 md:col-span-2 lg:col-span-1">
               <PassengerType
-                value={values.passengers}
-                onChange={(total) => setFieldValue("passengers", total)}
+                value={passenger}
+                onChange={(passenger) => setFieldValue("passenger", passenger)}
               />
               {initValidations &&
                 <ErrorMessage
-                  name="passengers"
+                  name="passenger"
                   component="div"
                   className="text-red-500 text-[10px] pl-4"
                 />

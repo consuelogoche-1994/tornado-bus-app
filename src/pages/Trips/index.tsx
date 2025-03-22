@@ -4,7 +4,7 @@ import TripDetail from '@/components/TripDetail';
 function Trips() {
   const numbers: number[] = [1, 2, 3];
   return (
-    <Layout showBanner={true}>
+    <Layout showTripSelector={true}>
       <div className='mt-6'>
         <h1 className='text-2xl mb-6'>Elige un viaje disponible</h1>
  

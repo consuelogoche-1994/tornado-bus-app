@@ -14,16 +14,17 @@ import { City } from "../../types/cities";
 
 interface CityTypeProps {
   id: string;
+  value: Number | null;
   cities: City[];
   onSelected: (cityID: number | null) => void;
   onChange: (inputValue: string) => void;
   dependencyReset: number | null;
 }
 
-function SearchSelect({ id, cities, onSelected, onChange, dependencyReset }: CityTypeProps) {
+function SearchSelect({ id, value, cities, onSelected, onChange, dependencyReset }: CityTypeProps) {
   const [open, setOpen] = useState<boolean>(false);
-  const [citySelected, setCitySelected] = useState<number | null>(null);
-  const [inputValue, setInputValue] = useState<string>("");
+  const [citySelected, setCitySelected] = useState<Number | null>(null);
+  const [inputValue, setInputValue] = useState<string >("");
 
   useEffect(() => {
     if(dependencyReset) {
@@ -31,6 +32,12 @@ function SearchSelect({ id, cities, onSelected, onChange, dependencyReset }: Cit
       setCitySelected(null);
     };
   }, [dependencyReset]);
+
+  useEffect(() => {
+    if(value) {
+      setCitySelected(value);
+    };
+  }, [value]);
 
   /**
    * Updates the selected city state and triggers the onSelected callback.

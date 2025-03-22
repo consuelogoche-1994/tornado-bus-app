@@ -2,7 +2,9 @@ import { usePassengers } from "../../hooks/usePassengers";
 import { PlusCircleIcon, MinusCircleIcon } from "@heroicons/react/24/solid";
 import { UserIcon } from "@heroicons/react/24/outline";
 import { Button } from "@/components/ui/button";
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import { PassengerCount } from "../../types/tripDetails";
+
 import {
   Popover,
   PopoverContent,
@@ -10,37 +12,31 @@ import {
 } from "@/components/ui/popover";
 
 interface PassengerTypeProps {
-  value: number;
-  onChange: (total: number) => void;
-}
-
-interface PassengerCount {
-  adulto: number;
-  niño: number;
-  senior: number;
-  total: number;
+  value: PassengerCount;
+  onChange: (passenger: PassengerCount) => void;
 }
 
 function PassengerType({ value, onChange }: PassengerTypeProps) {
   
     const { passengerTypes } = usePassengers();
     const [open, setOpen] = useState(false);
-    const [passengerCounts, setPassengerCounts] = useState<PassengerCount>({
-      adulto: 1,
-      niño: 0,
-      senior: 0,
-      total: value,
-    });
+    const [passengerCounts, setPassengerCounts] = useState<PassengerCount>(value);
+
+    useEffect(() => {
+      if(value) {
+        setPassengerCounts(value);
+      };
+    }, [value]);
 
     const updatePassengerCount = (category: keyof PassengerCount, change: number) => {
       setPassengerCounts((prev) => {
-        const newCount = Math.max(0, prev[category] + change); // Evitar valores negativos en la categoría
+        const newCount = Math.max(0, prev[category] + change);
         const updatedCounts = {
           ...prev,
           [category]: newCount,
         };
         updatedCounts.total = Math.max(0, updatedCounts.adulto + updatedCounts.niño + updatedCounts.senior);
-        onChange(updatedCounts.total);
+        onChange(updatedCounts);
         return updatedCounts;
       });
     };
