@@ -1,6 +1,7 @@
 import { PropsWithChildren } from "react";
 import NavBar from "../Navbar";
 import TripSelector from "../TripSelector";
+import { Toaster } from "sonner";
 
 interface LayoutProps {
   showBanner?: boolean; // Definimos `showBanner` como opcional
@@ -44,6 +45,7 @@ const Layout = ({ children, showBanner = false, showTripSelector = false}: Props
       <footer>
 
       </footer>
+      <Toaster position="top-right" richColors />
     </div>
     
 
