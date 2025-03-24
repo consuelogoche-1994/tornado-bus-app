@@ -27,7 +27,7 @@ const toggleSeatSelection = (seat: Seat) => {
 
 const getSeatForType = (seat: Seat) => {
   let content;
-  if(seat.isEmpty === 1) content = <SeatIcon className={`text-[${seat.colorGroup}] cursor-default`} isAvailable={true}/>;
+  if(seat.isEmpty === 0 && seat.seat > 0) content = <SeatIcon className={`text-[${seat.colorGroup}] cursor-default`} isAvailable={true}/>;
   if(seat.seat === 0 && seat.icon) content = <div className="cursor-default">icon</div>
   if(seat.seat > 0 && seat.idStatus === 663) content = <SeatIcon className="text-primary cursor-pointer" isAvailable={true}/>;
   const isSelected = selectedSeats.some(selectedSeat => selectedSeat.id === seat.id);
@@ -37,7 +37,7 @@ const getSeatForType = (seat: Seat) => {
 
 const getSeatColorText = (seat: Seat) => {
   let colorText;
-  if(seat.isEmpty === 1) colorText = `text-[${seat.colorGroup}] cursor-defaul`;
+  if(seat.isEmpty === 0 && seat.seat > 0) colorText = `text-[${seat.colorGroup}] cursor-defaul`;
   if(seat.seat > 0 && seat.idStatus === 663) colorText = "text-primary cursor-pointer";
   const isSelected = selectedSeats.some(selectedSeat => selectedSeat.id === seat.id);
   if(isSelected) colorText = "text-white cursor-pointer";
@@ -48,7 +48,7 @@ const getSeatColorText = (seat: Seat) => {
     <div className="flex gap-6 flex-wrap justify-center">
       {levels?.map((level) => (
         <div key={level.nivel} className="">
-          <h2 className="text-lg font-semibold mb-4">Nivel {level.nivel}</h2>
+          <h2 className="mb-2 mt-4">Nivel {level.nivel}</h2>
           <div
             className="p-4 border border-gray-300 rounded-xl gap-2"
             style={{
