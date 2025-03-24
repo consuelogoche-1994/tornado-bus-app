@@ -1,31 +1,28 @@
 import SeatIcon from "../icons/seat";
-import { useState } from "react";
 import { SeatLevel, Seat } from "../../types/seats"
 import { toast } from "sonner";
 
 interface busSeatSelectorProps {
   levels: SeatLevel[];
   maxSeats: number; // Maximum selectable seats
-  onSeatSelect: (selectedSeatIds: number[]) => void;
+  onSeatSelect: (selectedSeatIds: Seat[]) => void;
+  selectedSeats: Seat[];
 }
-const BusSeatSelector = ({ levels, maxSeats, onSeatSelect }: busSeatSelectorProps) => {
-
-const [selectedSeats, setSelectedSeats] = useState<number[]>([]);
+const BusSeatSelector = ({ levels, maxSeats, onSeatSelect, selectedSeats }: busSeatSelectorProps) => {
 
 // Toggles seat selection while respecting the maxSeats limit
-const toggleSeatSelection = (seatId: number) => {
+const toggleSeatSelection = (seat: Seat) => {
   let updatedSeats;
-  if (selectedSeats.includes(seatId)) {
-    updatedSeats = selectedSeats.filter(id => id !== seatId);
+  if (selectedSeats.some(selected => selected.id === seat.id)) {
+    updatedSeats = selectedSeats.filter(selected => selected.id !== seat.id);
   } else {
     if (selectedSeats.length >= maxSeats) {
       toast.error(`Solo puedes seleccionar hasta ${maxSeats} asientos.`);
       return;
     }
-    updatedSeats = [...selectedSeats, seatId];
+    updatedSeats = [...selectedSeats, seat];
   }
-  setSelectedSeats(updatedSeats);
-  onSeatSelect(updatedSeats); // Notify parent
+  onSeatSelect(updatedSeats);
 };
 
 const getSeatForType = (seat: Seat) => {
@@ -33,9 +30,8 @@ const getSeatForType = (seat: Seat) => {
   if(seat.isEmpty === 1) content = <SeatIcon className={`text-[${seat.colorGroup}] cursor-default`} isAvailable={true}/>;
   if(seat.seat === 0 && seat.icon) content = <div className="cursor-default">icon</div>
   if(seat.seat > 0 && seat.idStatus === 663) content = <SeatIcon className="text-primary cursor-pointer" isAvailable={true}/>;
-  if(selectedSeats.includes(seat.id)){
-    content = <SeatIcon className="text-primary cursor-pointer" isAvailable={false}/>;
-  }
+  const isSelected = selectedSeats.some(selectedSeat => selectedSeat.id === seat.id);
+  if (isSelected) content = <SeatIcon className="text-primary cursor-pointer" isAvailable={false} />;
   return content;
 }
 
@@ -43,9 +39,8 @@ const getSeatColorText = (seat: Seat) => {
   let colorText;
   if(seat.isEmpty === 1) colorText = `text-[${seat.colorGroup}] cursor-defaul`;
   if(seat.seat > 0 && seat.idStatus === 663) colorText = "text-primary cursor-pointer";
-  if(selectedSeats.includes(seat.id)){
-    colorText = "text-white cursor-pointer";
-  }
+  const isSelected = selectedSeats.some(selectedSeat => selectedSeat.id === seat.id);
+  if(isSelected) colorText = "text-white cursor-pointer";
   return colorText;
 }
 
@@ -72,7 +67,7 @@ const getSeatColorText = (seat: Seat) => {
                   <div
                     key={`${rowIndex}-${colIndex}`}
                     className={`w-10 h-10 flex items-center justify-center border border-gray-300 ${seat?getSeatColorText(seat):""}`}
-                    onClick={() => seat?.id && seat?.seat >0 && seat.idStatus === 663  && toggleSeatSelection(seat.id)}
+                    onClick={() => seat?.id && seat?.seat >0 && seat.idStatus === 663  && toggleSeatSelection(seat)}
                   >
                     <div className="relative">
                       {seat?getSeatForType(seat):""}

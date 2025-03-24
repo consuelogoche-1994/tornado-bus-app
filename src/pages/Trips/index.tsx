@@ -1,10 +1,23 @@
-import Layout from '../../components/Layout'
+import { useNavigate } from 'react-router-dom';
+import Layout from '@/components/Layout'
 import TripDetail from '@/components/TripDetail';
-import { useDepartureTravel } from "../../hooks/useDepartureTravel";
+import { useSelectedTrip } from "@/hooks/useSelectedTrip";
+import { useSeats } from "@/hooks/useSeats";
+import { DepartureTravel } from "@/types/departureTravel";
+import { useDepartureTravel } from "@/hooks/useDepartureTravel";
 import { FaceFrownIcon } from "@heroicons/react/24/outline";
 
 function Trips() {
+  const navigate = useNavigate();
   const { departureTravels, isLoading } = useDepartureTravel();
+  const { fetchSeats } = useSeats();
+  const { setSelectedTrip } = useSelectedTrip();
+
+  const handleTripSelection = (selectedTrip:DepartureTravel ) => {
+    setSelectedTrip(selectedTrip);
+    fetchSeats(selectedTrip.id, selectedTrip.cityInitID, selectedTrip.cityEndID);
+    navigate("/seat-selection");
+  };
 
   return (
     <Layout showBanner={true}>
@@ -15,7 +28,7 @@ function Trips() {
           departureTravels.length ? (
             <div className="w-full flex flex-col gap-4">
               {departureTravels.map((departureTravel, index) => (
-                <TripDetail departureTravel={departureTravel} selectedTrip={false}  key={index} />
+                <TripDetail departureTravel={departureTravel} selectedTrip={false} onTripSelect={handleTripSelection} key={index} />
               ))}
             </div>)
             :(
@@ -28,9 +41,9 @@ function Trips() {
             )
         ) : (
           <div className="w-full h-40">
-            <div className='flex flex-row w-full h-full gap-2 items-center justify-center'>
-              <div className="w-10 h-10 border-5 border-gray-300 border-t-primary rounded-full animate-spin"></div>
-              <div className='text-gray-500 text-2xl'>Cargando ....</div>
+            <div className='flex flex-row w-full h-full gap-4 items-center justify-center'>
+              <div className="w-7 h-7 border-4 border-gray-300 border-t-primary rounded-full animate-spin"></div>
+              <div className='text-text'>Cargando ....</div>
             </div>
           </div>
         )}
