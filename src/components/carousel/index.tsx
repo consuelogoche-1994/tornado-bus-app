@@ -14,19 +14,19 @@ const carouselData: CarouselItem[] = [
         id: 2,
         title: "Viaje a San Antonio",
         description: "Explora San Antonio con nuestro servicio de buses de lujo.",
-        imageUrl: "/src/assets/san-antonio.jpg",
+        imageUrl: "/san-antonio.jpg",
     },
     {
         id: 1,
         title: "Viaje a Laredo",
         description: "Disfruta de un cómodo viaje desde Dallas a Laredo.",
-        imageUrl: "/src/assets/laredo.jpg",
+        imageUrl: "/laredo.jpg",
     },
     {
         id: 3,
         title: "Viaje a Houston",
         description: "¡Reserva tu viaje a Houston ahora y vive la experiencia!",
-        imageUrl: "/src/assets/houston.jpg",
+        imageUrl: "/houston.jpg",
     },
 ];
 
