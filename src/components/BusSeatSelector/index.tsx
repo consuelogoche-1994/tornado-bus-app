@@ -1,6 +1,7 @@
 import SeatIcon from "../icons/seat";
 import { SeatLevel, Seat } from "@/types/seats"
 import { useMarkSeat } from "@/hooks/useMarkSeat";
+import { UserIcon } from '@heroicons/react/24/outline';
 import { useSelectedTrip } from "@/hooks/useSelectedTrip";
 import { toast } from "sonner";
 
@@ -49,7 +50,7 @@ const toggleSeatSelection = (seat: Seat) => {
 const getSeatForType = (seat: Seat) => {
   let content;
   if(seat.isEmpty === 0 && seat.seat > 0) content = <SeatIcon className={`text-[${seat.colorGroup}] cursor-default`} isAvailable={true}/>;
-  if(seat.seat === 0 && seat.icon) content = <div className="cursor-default">icon</div>
+  if(seat.seat === 0 && seat.icon === "chofer") content = <div className="cursor-default"><UserIcon className="h-6 w-6 text-gray-300" /></div>
   if(seat.seat > 0 && seat.idStatus === 663) content = <SeatIcon className="text-primary cursor-pointer" isAvailable={true}/>;
   const isSelected = selectedSeats.some(selectedSeat => selectedSeat.id === seat.id);
   if (isSelected) content = <SeatIcon className="text-primary cursor-pointer" isAvailable={false} />;
@@ -92,7 +93,7 @@ const getSeatColorText = (seat: Seat) => {
                   return (
                     <div
                       key={`${rowIndex}-${colIndex}`}
-                      className={`w-10 h-10 flex items-center justify-center border border-gray-300 ${seat?getSeatColorText(seat):""}`}
+                      className={`w-10 h-10 flex items-center justify-center ${seat?getSeatColorText(seat):""}`}
                       onClick={() => seat?.id && seat?.seat >0 && seat.idStatus === 663  && handleSelectSeat(seat)}
                     >
                       <div className="relative">

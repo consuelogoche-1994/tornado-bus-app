@@ -1,9 +1,9 @@
 @theme {
-    --color-primary: #006275;   /* Azul vibrante para destacar */
-    --color-secondary: #008a77; /* Azul más oscuro para profundidad */
-    --color-tertiary: #92E1D5; /* Azul más oscuro para profundidad */
-    --color-accent: #F3F2F6;    /* Amarillo dorado para llamados a la acción */
-    --color-neutral: #F3F2F6;   /* Gris claro para fondos limpios */
-    --color-text: #212121;      /* Negro suave para textos */
-    --color-text-grey: #212121;      /* Negro suave para textos */
+    --color-primary: #0043C1;
+    --color-secondary: #00B4D8;
+    --color-tertiary: #FF5D00;
+    --color-accent: #F3F2F6;
+    --color-neutral: #F3F2F6;
+    --color-text: #212121;
+    --color-text-grey: #212121;
 }

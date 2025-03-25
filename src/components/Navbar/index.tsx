@@ -24,7 +24,10 @@ const Navbar = () => {
         
         {/* Logo */}
         <div className="text-xl font-semibold whitespace-nowrap">
-          <NavLink to="/">Tornado Bus</NavLink>
+          <NavLink to="/">
+          <img className='h-6' src="/logo.svg" alt="Logo"  />
+        
+          </NavLink>
         </div>
 
         {/* Desktop Menu */}
