@@ -1,9 +1,9 @@
 import * as React from 'react';
+import { useNavigate } from 'react-router-dom';
 import { Dialog, DialogContent, DialogOverlay, DialogTitle, DialogDescription } from '@radix-ui/react-dialog';
-import { Button } from "@/components/ui/button";  // Asegúrate de que Button esté importado correctamente
+import { Button } from "@/components/ui/button";
 import { Seat } from "@/types/seats";
 import TripSummary from '../TripSummary';
-
 
 interface ModalProps {
   isOpen: boolean;
@@ -12,6 +12,12 @@ interface ModalProps {
 }
 
 const TripConfirmationModal: React.FC<ModalProps> = ({ isOpen, onClose, selectedSeats }) => {
+  const navigate = useNavigate();
+  const handleConfirm = () => {
+    navigate("/");
+    window.location.reload();
+  };
+
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
       <DialogOverlay className="fixed inset-0 bg-black/50 z-1" />
@@ -24,7 +30,7 @@ const TripConfirmationModal: React.FC<ModalProps> = ({ isOpen, onClose, selected
           <TripSummary selectedSeats={selectedSeats}/>
           <div className="flex justify-end gap-2 mt-4">
             <Button variant="secondary" onClick={onClose}>Cancelar</Button>
-            <Button>Confirmar Boletos</Button>
+            <Button  onClick={handleConfirm}>Confirmar Boletos</Button>
           </div>
         </div>
       </DialogContent>

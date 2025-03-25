@@ -5,23 +5,26 @@ import { DepartureTravelProvider } from './DepartureTravelContext';
 import { TripDetailsProvider } from './TripDetailsContext';
 import { SeatsProvider } from './SeatsContext';
 import { SelectedTripProvider } from './SelectedTripContext';
+import { MarkSeatProvider } from './MarkSeatContext';
 
 export const AppProvider = ({ children }: { children: React.ReactNode }) => {
   return (
-    <SelectedTripProvider>
-      <SeatsProvider>
-        <DepartureTravelProvider>
-          <CityDestinityProvider>
-            <CityOriginProvider>
-            <PassengersProvider>
-                <TripDetailsProvider>
-                  {children}
-                </TripDetailsProvider>
-              </PassengersProvider>
-            </CityOriginProvider>
-          </CityDestinityProvider>
-        </DepartureTravelProvider>
-      </SeatsProvider>
-    </ SelectedTripProvider>
+    <MarkSeatProvider>
+      <SelectedTripProvider>
+        <SeatsProvider>
+          <DepartureTravelProvider>
+            <CityDestinityProvider>
+              <CityOriginProvider>
+              <PassengersProvider>
+                  <TripDetailsProvider>
+                    {children}
+                  </TripDetailsProvider>
+                </PassengersProvider>
+              </CityOriginProvider>
+            </CityDestinityProvider>
+          </DepartureTravelProvider>
+        </SeatsProvider>
+      </ SelectedTripProvider>
+    </  MarkSeatProvider>
   );
 };

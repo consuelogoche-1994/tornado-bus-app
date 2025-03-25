@@ -38,4 +38,5 @@ export interface DepartureTravel {
   companyLogo: string;
   currencyID: number;
   currency: string;
+  itinerary: number | null;
 }

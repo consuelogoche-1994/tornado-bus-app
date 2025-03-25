@@ -75,10 +75,6 @@ function SeatSelection() {
                 isOpen={isDialogOpen}
                 onClose={() => setIsDialogOpen(false)}
                 selectedSeats={selectedSeats}
-                // onConfirm={() => { 
-                //   console.log("Viaje confirmado");
-                //   setIsDialogOpen(false);
-                // }} 
               />
             </div>
           </div>
