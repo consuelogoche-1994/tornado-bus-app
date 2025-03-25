@@ -1,10 +1,13 @@
-import Layout from '../../components/Layout'
+import Layout from '@/components/Layout';
+import Carousel from '@/components/carousel';
 
 function Home() {
 
   return (
     <Layout showBanner={true}>
-              <h1 className='mt-30'></h1>
+          <div className='pt-6'>
+            <Carousel></Carousel>
+          </div>
     </Layout>
   )
 }
