@@ -46,6 +46,8 @@ Esta aplicación fue construida utilizando las siguientes tecnologías:
 9. **Confirmación de Reserva**:
    - Simula el proceso de reserva con una **ventana emergente** o **alerta** de confirmación.
 
+Puedes probar la aplicación en [https://tornado-bus-company.netlify.app](https://tornado-bus-company.netlify.app/).
+
 ## 🚀 Instalación y Ejecución
 
 - Clonar Repositorio
