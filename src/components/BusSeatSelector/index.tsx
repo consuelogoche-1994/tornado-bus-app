@@ -1,6 +1,7 @@
 import SeatIcon from "../icons/seat";
 import { SeatLevel, Seat } from "@/types/seats"
-import { useMarkSeat } from "@/hooks/useMarkSeat";
+import { useMarkSeatStore } from "@/stores/useMarkSeatStore";
+
 import { UserIcon } from '@heroicons/react/24/outline';
 import { useSelectedTripStore } from '@/stores/useSelectedTripStore';
 import { toast } from "sonner";
@@ -13,7 +14,7 @@ interface busSeatSelectorProps {
 }
 const BusSeatSelector = ({ levels, maxSeats, onSeatSelect, selectedSeats }: busSeatSelectorProps) => {
 
-const {loading, markSeat } = useMarkSeat();
+const {loading, markSeat } = useMarkSeatStore();
 const { selectedTrip } = useSelectedTripStore();
 
 
