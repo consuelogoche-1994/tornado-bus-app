@@ -8,7 +8,7 @@ import TripConfirmationModal from "@/components/TripConfirmationModal";
 import TripSummary from "@/components/TripSummary"
 import { Button } from "@/components/ui/button"
 import { useSeatsStore } from '@/stores/useSeatsStore';
-import { useSelectedTrip } from "@/hooks/useSelectedTrip";
+import { useSelectedTripStore } from '@/stores/useSelectedTripStore';
 import { useTripDetails } from "@/hooks/useTripDetails";
 import { Seat } from "@/types/seats"
 import { toast } from "sonner";
@@ -16,7 +16,7 @@ import { toast } from "sonner";
 function SeatSelection() {
   const navigate = useNavigate();
   const { seatLevels, isLoading } = useSeatsStore();
-  const { selectedTrip } = useSelectedTrip();
+  const { selectedTrip } = useSelectedTripStore();
   const { tripDetail } = useTripDetails();
   const [selectedSeats, setSelectedSeats] = useState<Seat[]>([]);
   const [isDialogOpen, setIsDialogOpen] = useState(false);

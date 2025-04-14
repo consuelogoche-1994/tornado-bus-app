@@ -1,7 +1,7 @@
 import { useNavigate } from 'react-router-dom';
 import Layout from '@/components/Layout'
 import TripDetail from '@/components/TripDetail';
-import { useSelectedTrip } from "@/hooks/useSelectedTrip";
+import { useSelectedTripStore } from '@/stores/useSelectedTripStore';
 import { useSeatsStore } from '@/stores/useSeatsStore';
 import { DepartureTravel } from "@/types/departureTravel";
 import { useDepartureTravelStore } from '@/stores/useDepartureTravelStore';
@@ -11,7 +11,7 @@ function Trips() {
   const navigate = useNavigate();
   const { departureTravels, isLoading } = useDepartureTravelStore();
   const { fetchSeats } = useSeatsStore();
-  const { setSelectedTrip } = useSelectedTrip();
+  const { setSelectedTrip } = useSelectedTripStore();
 
   const handleTripSelection = (selectedTrip:DepartureTravel ) => {
     setSelectedTrip(selectedTrip);

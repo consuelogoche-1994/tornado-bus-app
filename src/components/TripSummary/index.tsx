@@ -1,5 +1,5 @@
 import { useTripDetails } from "@/hooks/useTripDetails";
-import { useSelectedTrip } from "@/hooks/useSelectedTrip";
+import { useSelectedTripStore } from '@/stores/useSelectedTripStore';
 import { Seat } from "@/types/seats";
 
 
@@ -9,7 +9,7 @@ interface TripSummaryProps {
 
 const TripSummary = ({ selectedSeats }: TripSummaryProps ) => {
 const { tripDetail } = useTripDetails();
-const { selectedTrip } = useSelectedTrip();
+const { selectedTrip } = useSelectedTripStore();
 
 return (
 <div className="w-full flex flex-col gap-2">
