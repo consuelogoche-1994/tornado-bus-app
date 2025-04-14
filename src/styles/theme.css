@@ -1,5 +1,4 @@
-@layer base {
-:root {
+@theme {
     --color-primary: #0043C1;
     --color-secondary: #00B4D8;
     --color-tertiary: #FF5D00;
@@ -7,5 +6,4 @@
     --color-neutral: #F3F2F6;
     --color-text: #212121;
     --color-text-grey: #212121;
-}
 }
