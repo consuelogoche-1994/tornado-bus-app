@@ -1,4 +1,4 @@
-import { useTripDetails } from "@/hooks/useTripDetails";
+import { useTripDetailsStore } from '@/stores/useTripDetailsStore';
 import { useSelectedTripStore } from '@/stores/useSelectedTripStore';
 import { Seat } from "@/types/seats";
 
@@ -8,7 +8,7 @@ interface TripSummaryProps {
 }
 
 const TripSummary = ({ selectedSeats }: TripSummaryProps ) => {
-const { tripDetail } = useTripDetails();
+const { tripDetail } = useTripDetailsStore();
 const { selectedTrip } = useSelectedTripStore();
 
 return (

@@ -9,7 +9,7 @@ import TripSummary from "@/components/TripSummary"
 import { Button } from "@/components/ui/button"
 import { useSeatsStore } from '@/stores/useSeatsStore';
 import { useSelectedTripStore } from '@/stores/useSelectedTripStore';
-import { useTripDetails } from "@/hooks/useTripDetails";
+import { useTripDetailsStore } from '@/stores/useTripDetailsStore';
 import { Seat } from "@/types/seats"
 import { toast } from "sonner";
 
@@ -17,7 +17,7 @@ function SeatSelection() {
   const navigate = useNavigate();
   const { seatLevels, isLoading } = useSeatsStore();
   const { selectedTrip } = useSelectedTripStore();
-  const { tripDetail } = useTripDetails();
+  const { tripDetail } = useTripDetailsStore();
   const [selectedSeats, setSelectedSeats] = useState<Seat[]>([]);
   const [isDialogOpen, setIsDialogOpen] = useState(false);
 
