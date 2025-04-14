@@ -5,7 +5,7 @@ import DatePicker from "../DatePicker";
 import PassengerType from "../PassengerType";
 import { useState, useEffect } from "react";
 import { useCityOriginStore } from '@/stores/useCityOriginStore';
-import { useCitiesDestinity } from "../../hooks/useCitiesDestinity";
+import { useCityDestinityStore } from '@/stores/useCityDestinityStore';
 import { useTripDetails } from "../../hooks/useTripDetails";
 import { useDepartureTravel } from "../../hooks/useDepartureTravel";
 
@@ -17,7 +17,7 @@ function TripSelector() {
 
   const navigate = useNavigate();
   const { citiesOrigin, fetchCitiesOrigin } = useCityOriginStore();
-  const { citiesDestinity, fetchCitiesDestinity } = useCitiesDestinity();
+  const { citiesDestinity, fetchCitiesDestinity } = useCityDestinityStore();
   const { tripDetail, setTripDetail } = useTripDetails();
   const { fetchDepartureTravels } = useDepartureTravel();
   const [ selectedcityInitID, setSelectedcityInitID] = useState<number | null>(null);
