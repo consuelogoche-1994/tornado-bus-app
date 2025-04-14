@@ -10,11 +10,7 @@ interface CityDestinityState {
 
 export const useCityDestinityStore = create<CityDestinityState>((set) => {
   const fetchCitiesDestinity = async (cityInitId: number, query: string = '') => {
-    console.log(cityInitId);
-    console.log(query);
-    // Return Early for short queries
     if (query !== "" && query.length < 3) return;
-
     set({ isLoading: true });
 
     try {

@@ -26,8 +26,8 @@ function SeatSelection() {
   };
 
   const handleOpenModal = () => {
-    if (selectedSeats.length < tripDetail.passenger.total) {
-      toast.error(`¡Casi listo! 😎 Solo faltan ${tripDetail.passenger.total - selectedSeats.length} asientos para completar tu selección. ¡Elige tus asientos y confirma tu viaje!`);
+    if (selectedSeats.length < tripDetail.totalPassengers) {
+      toast.error(`¡Casi listo! 😎 Solo faltan ${tripDetail.totalPassengers - selectedSeats.length} asientos para completar tu selección. ¡Elige tus asientos y confirma tu viaje!`);
       return;
     }
     setIsDialogOpen(true);
@@ -62,7 +62,7 @@ function SeatSelection() {
                     <div className='text-text'>Cargando ....</div>
                   </div>
                   ):
-                  (<BusSeatSelector levels={seatLevels} maxSeats={tripDetail.passenger.total} onSeatSelect={handleSeatSelection} selectedSeats={selectedSeats}/>)
+                  (<BusSeatSelector levels={seatLevels} onSeatSelect={handleSeatSelection} selectedSeats={selectedSeats}/>)
                 }
             </div>
           </div>

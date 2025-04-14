@@ -9,7 +9,7 @@ import { useCityDestinityStore } from '@/stores/useCityDestinityStore';
 import { useDepartureTravelStore } from '@/stores/useDepartureTravelStore';
 import { useTripDetailsStore } from '@/stores/useTripDetailsStore';
 
-import { PassengerCount, TripDetail } from "../../types/tripDetails";
+import { TripDetail, PassengerCountType } from "../../types/tripDetails";
 import { Formik, Form, ErrorMessage } from "formik";
 import * as Yup from "yup";
 
@@ -22,12 +22,7 @@ function TripSelector() {
   const { fetchDepartureTravels } = useDepartureTravelStore();
   const [ selectedcityInitID, setSelectedcityInitID] = useState<number | null>(null);
   const [ selectedcityEndID, setSelectedcityEndID] = useState<number | null>(null);
-  const [ passenger, setPassenger] = useState<PassengerCount>({
-    adulto: 1,
-    niño: 0,
-    senior: 0,
-    total: 1,
-  });
+  const [ passengersCount, setPassengersCount] = useState<PassengerCountType[]>([]);
   const [ initValidations, setInitValidations] = useState<Boolean>(false);
   const [date, setDate] = useState<Date | undefined>();
 
@@ -41,8 +36,8 @@ function TripSelector() {
     if (tripDetail.cityEndID) {
       setSelectedcityEndID(tripDetail.cityEndID);
     }
-    if (tripDetail.passenger) {
-      setPassenger(tripDetail.passenger);
+    if (tripDetail.passengersCount.length > 0) {
+      setPassengersCount(tripDetail.passengersCount);
     }
   }, [tripDetail]);
 
@@ -65,11 +60,9 @@ function TripSelector() {
   };
 
   const validationSchema = Yup.object().shape({
-    passenger: Yup.object().shape({
-      total: Yup.number()
-        .min(1, "Mínimo un pasajero")
-        .required("Mínimo un pasajero"),
-    }),
+    totalPassengers: Yup.number()
+      .min(1, "Mínimo un pasajero")
+      .required("Mínimo un pasajero"),
     cityInitID: Yup.number()
       .required("Debe seleccionar una ciudad de origen"),
     cityEndID: Yup.number()
@@ -80,6 +73,11 @@ function TripSelector() {
   
   });
 
+  const calculateTotalPassenger = (passenger: PassengerCountType[]) => {
+    const total = passenger.reduce((acc, passenger) => acc + (passenger.total || 0), 0);
+    return total;
+  };
+
   const handleSubmit = (values: TripDetail) => {
     const filters = {
       limit: 25,
@@ -87,7 +85,7 @@ function TripSelector() {
       filters: {
         date: values.date?.toISOString().split('T')[0] || '',
         city: [values.cityInitID ?? 0, values.cityEndID ?? 0],
-        passengerNumber: values.passenger.total,
+        passengerNumber: values.totalPassengers,
         passengerDisabilityNumber: 0,
         orderTravel: 1060,
         orderMaxMinTravel: 1,
@@ -173,12 +171,15 @@ function TripSelector() {
             </div>
             <div className="flex-1 p-1 rounded-md border border-gray-300 md:col-span-2 lg:col-span-1">
               <PassengerType
-                value={passenger}
-                onChange={(passenger) => setFieldValue("passenger", passenger)}
+                value={passengersCount}
+                onChange={(passengers) => {
+                  setFieldValue("totalPassengers", calculateTotalPassenger(passengers));
+                  setFieldValue("passengersCount", passengers);
+                }}
               />
               {initValidations &&
                 <ErrorMessage
-                  name="passenger.total"
+                  name="totalPassengers"
                   component="div"
                   className="text-red-500 text-[10px] pl-4"
                 />

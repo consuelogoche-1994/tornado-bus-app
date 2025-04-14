@@ -1,5 +1,5 @@
 export interface MarkSeatRequest {
-  tickeTypeID: number;
+  tickeTypeID: number | null;
   ticketSessionId: number | null;
   cityInitID: number | null;
   cityEndID: number | null;
@@ -19,6 +19,7 @@ export interface MarkSeatRequest {
 }
 
 export interface MarkSeatFilter {
+  tickeTypeID: number | null;
   cityInitID: number | null;
   cityEndID: number | null;
   itineraryID: number | null;

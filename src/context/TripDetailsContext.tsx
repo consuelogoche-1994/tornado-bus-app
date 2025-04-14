@@ -10,12 +10,8 @@ export const TripDetailsContext = createContext<TripDetailsContextProps | undefi
 
 export const TripDetailsProvider = ({ children }: { children: ReactNode }) => {
   const [tripDetail, setTripDetail] = useState<TripDetail>({
-    passenger: {
-      adulto: 1,
-      niño: 0,
-      senior: 0,
-      total: 1,
-    },
+    passengersCount:  [],
+    totalPassengers: 1,
     cityInitID: null,
     cityEndID: null,
     date: null,

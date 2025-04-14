@@ -17,7 +17,7 @@ export const useMarkSeatStore = create<MarkSeatState>((set, get) => {
     set({ loading: true });
 
     const params: MarkSeatRequest = {
-      tickeTypeID: 219,
+      tickeTypeID: filters.tickeTypeID,
       ticketSessionId: ticketSessionId,
       cityInitID: filters.cityInitID,
       cityEndID: filters.cityEndID,

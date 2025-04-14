@@ -1,5 +1,6 @@
 import SeatIcon from "../icons/seat";
 import { SeatLevel, Seat } from "@/types/seats"
+import { useTripDetailsStore } from '@/stores/useTripDetailsStore';
 import { useMarkSeatStore } from "@/stores/useMarkSeatStore";
 
 import { UserIcon } from '@heroicons/react/24/outline';
@@ -8,44 +9,44 @@ import { toast } from "sonner";
 
 interface busSeatSelectorProps {
   levels: SeatLevel[];
-  maxSeats: number; // Maximum selectable seats
   onSeatSelect: (selectedSeatIds: Seat[]) => void;
   selectedSeats: Seat[];
 }
-const BusSeatSelector = ({ levels, maxSeats, onSeatSelect, selectedSeats }: busSeatSelectorProps) => {
+const BusSeatSelector = ({ levels, onSeatSelect, selectedSeats }: busSeatSelectorProps) => {
 
+const { tripDetail } = useTripDetailsStore();
 const {loading, markSeat } = useMarkSeatStore();
 const { selectedTrip } = useSelectedTripStore();
 
+const passengerList =
+  tripDetail.passengersCount?.flatMap(({ total, ...rest }) =>
+  Array.from({ length: total }, () => ({
+      ...rest
+  }))
+  ) ?? [];
+
 
 const handleSelectSeat = async (seat: Seat) => {
+  if (selectedSeats.length === tripDetail.totalPassengers) {
+    toast.error(`Solo puedes seleccionar hasta ${tripDetail.totalPassengers} asientos.`);
+    return;
+  }
   const filter = {
+    tickeTypeID: passengerList[selectedSeats.length].id,
     cityInitID: selectedTrip?.cityInitID ?? null,
     cityEndID: selectedTrip?.cityEndID ?? null,
     itineraryID: selectedTrip?.id ?? 0,
     busPlaceID: [seat.id],
   };
-  const response = await markSeat(filter);
-  if(response !== null){
-    toggleSeatSelection(seat);
-  }else{
-    toast.error(`No se pudo reservar el asiento N° ${seat.seat}.`);
-  }
-};
-
-// Toggles seat selection while respecting the maxSeats limit
-const toggleSeatSelection = (seat: Seat) => {
-  let updatedSeats;
-  if (selectedSeats.some(selected => selected.id === seat.id)) {
-    updatedSeats = selectedSeats.filter(selected => selected.id !== seat.id);
-  } else {
-    if (selectedSeats.length >= maxSeats) {
-      toast.error(`Solo puedes seleccionar hasta ${maxSeats} asientos.`);
-      return;
-    }
+  markSeat(filter)
+  .then(() => {
+    let updatedSeats;
     updatedSeats = [...selectedSeats, seat];
-  }
-  onSeatSelect(updatedSeats);
+    onSeatSelect(updatedSeats);
+  })
+  .catch(() => {
+    toast.error(`No se pudo reservar el asiento N° ${seat.seat}.`);
+  });
 };
 
 const getSeatForType = (seat: Seat) => {

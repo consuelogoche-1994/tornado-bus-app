@@ -1,14 +1,17 @@
 export interface TripDetail {
-    passenger: PassengerCount;
+    passengersCount:  PassengerCountType[],
+    totalPassengers: number,
     cityInitID: number | null;
     cityEndID: number | null;
     date: Date | null;
   }
 
-  export interface PassengerCount {
-    adulto: number;
-    niño: number;
-    senior: number;
+  export interface PassengerCountType {
+    id: number;
+    name: string;
+    default: Boolean;
+    ageMin: number;
+    ageMax: number;
     total: number;
   }
 

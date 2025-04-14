@@ -2,7 +2,7 @@ import { PlusCircleIcon, MinusCircleIcon } from "@heroicons/react/24/solid";
 import { UserIcon } from "@heroicons/react/24/outline";
 import { Button } from "@/components/ui/button";
 import { useState, useEffect } from "react";
-import { PassengerCount } from "../../types/tripDetails";
+import { PassengerCountType } from "../../types/tripDetails";
 import { usePassengersStore } from "@/stores/usePassengersStore";
 
 import {
@@ -12,37 +12,56 @@ import {
 } from "@/components/ui/popover";
 
 interface PassengerTypeProps {
-  value: PassengerCount;
-  onChange: (passenger: PassengerCount) => void;
+  value: PassengerCountType[];
+  onChange: (passengers: PassengerCountType[]) => void;
 }
 
 function PassengerType({ value, onChange }: PassengerTypeProps) {
 
     const { passengerTypes, isLoading } = usePassengersStore();
     const [open, setOpen] = useState(false);
-    const [passengerCounts, setPassengerCounts] = useState<PassengerCount>(value);
-
+    const [localPassengers, setLocalPassengers] = useState<PassengerCountType[]>([]);
+    
     useEffect(() => {
-      if(value) {
-        setPassengerCounts(value);
-      };
-    }, [value]);
+      if(value.length > 0){
+        setLocalPassengers(value);
+      }else{
+        const updatedPassengers = passengerTypes.map(p => ({
+          ...p,
+          total: p.default ? 1 : 0,
+        }));
+        setLocalPassengers(updatedPassengers);
+        onChange(updatedPassengers);
+      }
+    }, [passengerTypes, value]);
 
-    const updatePassengerCount = (category: keyof PassengerCount, change: number) => {
-      setPassengerCounts((prev) => {
-        const newCount = Math.max(0, prev[category] + change);
-        const updatedCounts = {
-          ...prev,
-          [category]: newCount,
-        };
-        updatedCounts.total = Math.max(0, updatedCounts.adulto + updatedCounts.niño + updatedCounts.senior);
-        onChange(updatedCounts);
-        return updatedCounts;
+    const increasePassengerType = (passenger: PassengerCountType) => {
+      setLocalPassengers((prev) => {
+        const updatePassengers = prev.map((p) =>
+          p.id === passenger.id
+            ? { ...p, total: p.total + 1 }
+            : p
+        );
+        onChange(updatePassengers);
+        return updatePassengers;
       });
     };
 
-    const formatCaterory = (str: string): string => {
-      return str.slice(0, -3).toLowerCase();
+    const decreasePassengerType = (passenger: PassengerCountType) => {
+      setLocalPassengers((prev) => {
+        const updatePassengers = prev.map((p) =>
+          p.id === passenger.id
+            ? { ...p, total: Math.max(0, (p.total || 0) - 1) }
+            : p
+        );
+        onChange(updatePassengers);
+        return updatePassengers;
+      });
+    };
+
+    const calculateTotalPassenger = (passenger: PassengerCountType[]) => {
+      const total = passenger.reduce((acc, passenger) => acc + (passenger.total || 0), 0);
+      return total;
     };
 
     return (
@@ -55,7 +74,7 @@ function PassengerType({ value, onChange }: PassengerTypeProps) {
             <span>
               <Button variant="ghost" type="button" className="w-full justify-start text-left font-normal">
                 <UserIcon className="h-6 w-6" />
-                {passengerCounts.total} {passengerCounts.total === 1 ? "Pasajero" : "Pasajeros"}
+                {calculateTotalPassenger(localPassengers)} {calculateTotalPassenger(localPassengers) === 1 ? "Pasajero" : "Pasajeros"}
               </Button>
             </span>
           </PopoverTrigger>
@@ -68,7 +87,7 @@ function PassengerType({ value, onChange }: PassengerTypeProps) {
                 ):
                 (
                   <div className="p-4">
-                  {passengerTypes.map((type) => (
+                  {localPassengers.map((type) => (
                     <div key={type.id} className="flex justify-between items-center gap-16 w-full border-b border-gray-300 py-2">
                       <div className="flex flex-col">
                         <p>{type.name}</p>
@@ -79,12 +98,12 @@ function PassengerType({ value, onChange }: PassengerTypeProps) {
                       <div className="flex items-center gap-2">
                         <MinusCircleIcon
                           className="h-7 w-7 text-primary hover:text-primary/90 cursor-pointer"
-                          onClick={() => updatePassengerCount(formatCaterory(type.name) as keyof PassengerCount, -1)}
+                          onClick={() => decreasePassengerType(type)}
                         />
-                        <span>{passengerCounts[formatCaterory(type.name) as keyof PassengerCount]}</span>
+                        <span>{type.total}</span>
                         <PlusCircleIcon
                           className="h-7 w-7 text-primary hover:text-primary/90 cursor-pointer"
-                          onClick={() => updatePassengerCount(formatCaterory(type.name) as keyof PassengerCount, 1)}
+                          onClick={() => increasePassengerType(type)}
                         />
                       </div>
                     </div>

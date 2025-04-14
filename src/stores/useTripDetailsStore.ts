@@ -13,12 +13,8 @@ export const useTripDetailsStore = create<TripDetailsState>((set) => {
 
   return {
     tripDetail: {
-      passenger: {
-        adulto: 1,
-        niño: 0,
-        senior: 0,
-        total: 1,
-      },
+      passengersCount:  [],
+      totalPassengers: 1,
       cityInitID: null,
       cityEndID: null,
       date: null,
