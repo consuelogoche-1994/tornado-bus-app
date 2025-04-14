@@ -6,8 +6,8 @@ import PassengerType from "../PassengerType";
 import { useState, useEffect } from "react";
 import { useCityOriginStore } from '@/stores/useCityOriginStore';
 import { useCityDestinityStore } from '@/stores/useCityDestinityStore';
+import { useDepartureTravelStore } from '@/stores/useDepartureTravelStore';
 import { useTripDetails } from "../../hooks/useTripDetails";
-import { useDepartureTravel } from "../../hooks/useDepartureTravel";
 
 import { PassengerCount, TripDetail } from "../../types/tripDetails";
 import { Formik, Form, ErrorMessage } from "formik";
@@ -19,7 +19,7 @@ function TripSelector() {
   const { citiesOrigin, fetchCitiesOrigin } = useCityOriginStore();
   const { citiesDestinity, fetchCitiesDestinity } = useCityDestinityStore();
   const { tripDetail, setTripDetail } = useTripDetails();
-  const { fetchDepartureTravels } = useDepartureTravel();
+  const { fetchDepartureTravels } = useDepartureTravelStore();
   const [ selectedcityInitID, setSelectedcityInitID] = useState<number | null>(null);
   const [ selectedcityEndID, setSelectedcityEndID] = useState<number | null>(null);
   const [ passenger, setPassenger] = useState<PassengerCount>({

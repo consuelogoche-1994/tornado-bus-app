@@ -4,12 +4,12 @@ import TripDetail from '@/components/TripDetail';
 import { useSelectedTrip } from "@/hooks/useSelectedTrip";
 import { useSeats } from "@/hooks/useSeats";
 import { DepartureTravel } from "@/types/departureTravel";
-import { useDepartureTravel } from "@/hooks/useDepartureTravel";
+import { useDepartureTravelStore } from '@/stores/useDepartureTravelStore';
 import { FaceFrownIcon } from "@heroicons/react/24/outline";
 
 function Trips() {
   const navigate = useNavigate();
-  const { departureTravels, isLoading } = useDepartureTravel();
+  const { departureTravels, isLoading } = useDepartureTravelStore();
   const { fetchSeats } = useSeats();
   const { setSelectedTrip } = useSelectedTrip();
 
