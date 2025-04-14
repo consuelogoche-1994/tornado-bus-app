@@ -2,7 +2,7 @@ import { useNavigate } from 'react-router-dom';
 import Layout from '@/components/Layout'
 import TripDetail from '@/components/TripDetail';
 import { useSelectedTrip } from "@/hooks/useSelectedTrip";
-import { useSeats } from "@/hooks/useSeats";
+import { useSeatsStore } from '@/stores/useSeatsStore';
 import { DepartureTravel } from "@/types/departureTravel";
 import { useDepartureTravelStore } from '@/stores/useDepartureTravelStore';
 import { FaceFrownIcon } from "@heroicons/react/24/outline";
@@ -10,7 +10,7 @@ import { FaceFrownIcon } from "@heroicons/react/24/outline";
 function Trips() {
   const navigate = useNavigate();
   const { departureTravels, isLoading } = useDepartureTravelStore();
-  const { fetchSeats } = useSeats();
+  const { fetchSeats } = useSeatsStore();
   const { setSelectedTrip } = useSelectedTrip();
 
   const handleTripSelection = (selectedTrip:DepartureTravel ) => {
