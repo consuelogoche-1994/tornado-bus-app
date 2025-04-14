@@ -25,7 +25,8 @@ export const usePassengersStore = create<PassengersState>((set) => {
       set({ isLoading: false });
     }
   };
-
+  
+  // Fetch default data
   loadPassengerTypes();
 
   return {

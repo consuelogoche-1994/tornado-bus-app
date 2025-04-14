@@ -18,9 +18,7 @@ interface PassengerTypeProps {
 
 function PassengerType({ value, onChange }: PassengerTypeProps) {
 
-    const passengerTypes = usePassengersStore((state) => state.passengerTypes);
-    const isLoading = usePassengersStore((state) => state.isLoading);
-  
+    const { passengerTypes, isLoading } = usePassengersStore();
     const [open, setOpen] = useState(false);
     const [passengerCounts, setPassengerCounts] = useState<PassengerCount>(value);
 

@@ -4,7 +4,7 @@ import SearchSelect from "../SearchSelect";
 import DatePicker from "../DatePicker";
 import PassengerType from "../PassengerType";
 import { useState, useEffect } from "react";
-import { useCitiesOrigin } from "../../hooks/useCitiesOrigin";
+import { useCityOriginStore } from '@/stores/useCityOriginStore';
 import { useCitiesDestinity } from "../../hooks/useCitiesDestinity";
 import { useTripDetails } from "../../hooks/useTripDetails";
 import { useDepartureTravel } from "../../hooks/useDepartureTravel";
@@ -16,7 +16,7 @@ import * as Yup from "yup";
 function TripSelector() {
 
   const navigate = useNavigate();
-  const { citiesOrigin, fetchCitiesOrigin } = useCitiesOrigin();
+  const { citiesOrigin, fetchCitiesOrigin } = useCityOriginStore();
   const { citiesDestinity, fetchCitiesDestinity } = useCitiesDestinity();
   const { tripDetail, setTripDetail } = useTripDetails();
   const { fetchDepartureTravels } = useDepartureTravel();
