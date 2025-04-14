@@ -1,9 +1,9 @@
-import { usePassengers } from "../../hooks/usePassengers";
 import { PlusCircleIcon, MinusCircleIcon } from "@heroicons/react/24/solid";
 import { UserIcon } from "@heroicons/react/24/outline";
 import { Button } from "@/components/ui/button";
 import { useState, useEffect } from "react";
 import { PassengerCount } from "../../types/tripDetails";
+import { usePassengersStore } from "@/stores/usePassengersStore";
 
 import {
   Popover,
@@ -17,8 +17,10 @@ interface PassengerTypeProps {
 }
 
 function PassengerType({ value, onChange }: PassengerTypeProps) {
+
+    const passengerTypes = usePassengersStore((state) => state.passengerTypes);
+    const isLoading = usePassengersStore((state) => state.isLoading);
   
-    const { passengerTypes } = usePassengers();
     const [open, setOpen] = useState(false);
     const [passengerCounts, setPassengerCounts] = useState<PassengerCount>(value);
 
@@ -60,29 +62,38 @@ function PassengerType({ value, onChange }: PassengerTypeProps) {
             </span>
           </PopoverTrigger>
           <PopoverContent className="w-full p-0 border-gray-300">
-            <div className="p-4">
-              {passengerTypes.map((type) => (
-                <div key={type.id} className="flex justify-between items-center gap-16 w-full border-b border-gray-300 py-2">
-                  <div className="flex flex-col">
-                    <p>{type.name}</p>
-                    <p className="text-sm font-light text-gray-500">
-                      {type.ageMin} - {type.ageMax}
-                    </p>
-                  </div>
-                  <div className="flex items-center gap-2">
-                    <MinusCircleIcon
-                      className="h-7 w-7 text-primary hover:text-primary/90 cursor-pointer"
-                      onClick={() => updatePassengerCount(formatCaterory(type.name) as keyof PassengerCount, -1)}
-                    />
-                    <span>{passengerCounts[formatCaterory(type.name) as keyof PassengerCount]}</span>
-                    <PlusCircleIcon
-                      className="h-7 w-7 text-primary hover:text-primary/90 cursor-pointer"
-                      onClick={() => updatePassengerCount(formatCaterory(type.name) as keyof PassengerCount, 1)}
-                    />
-                  </div>
+            {
+              isLoading ? (
+                <div className="p-6 w-57 flex justify-center">
+                  <div className="w-8 h-8 border-3 border-gray-300 border-t-primary rounded-full animate-spin"></div>
                 </div>
-              ))}
-            </div>
+                ):
+                (
+                  <div className="p-4">
+                  {passengerTypes.map((type) => (
+                    <div key={type.id} className="flex justify-between items-center gap-16 w-full border-b border-gray-300 py-2">
+                      <div className="flex flex-col">
+                        <p>{type.name}</p>
+                        <p className="text-sm font-light text-gray-500">
+                          {type.ageMin} - {type.ageMax}
+                        </p>
+                      </div>
+                      <div className="flex items-center gap-2">
+                        <MinusCircleIcon
+                          className="h-7 w-7 text-primary hover:text-primary/90 cursor-pointer"
+                          onClick={() => updatePassengerCount(formatCaterory(type.name) as keyof PassengerCount, -1)}
+                        />
+                        <span>{passengerCounts[formatCaterory(type.name) as keyof PassengerCount]}</span>
+                        <PlusCircleIcon
+                          className="h-7 w-7 text-primary hover:text-primary/90 cursor-pointer"
+                          onClick={() => updatePassengerCount(formatCaterory(type.name) as keyof PassengerCount, 1)}
+                        />
+                      </div>
+                    </div>
+                  ))}
+                </div>
+                )
+            }
           </PopoverContent>
         </Popover>
       </div>
