@@ -64,7 +64,7 @@ const getSeatForType = (seat: Seat) => {
   if(IS_SEAT_PUERTA(seat)) return <div className="cursor-default"><img className="h-6 w-6" src="icons/icon_door.svg" alt="puerta"/></div>
   if(IS_SEAT_WATER(seat)) return <div className="cursor-default"><img className="h-6 w-6" src="icons/icon_water.svg" alt="water"/></div>
   if(IS_SEAT_EMPTY(seat)) return <SeatIcon className={`text-[${seat.colorGroup}] cursor-default`} isAvailable={false}/>;
-  if(IS_SEAT_SELECTED(seat)) return <SeatIcon className="text-primary cursor-pointer" isAvailable={false} />;
+  if(IS_SEAT_SELECTED(seat)) return <SeatIcon className="text-primary cursor-default" isAvailable={false} />;
   if(IS_SEAT_AVAILABLE(seat)) return <SeatIcon className="text-primary cursor-pointer" isAvailable={true}/>;
 }
 
@@ -102,7 +102,7 @@ const getSeatColorText = (seat: Seat) => {
                     <div
                       key={`${rowIndex}-${colIndex}`}
                       className={`w-10 h-10 flex items-center justify-center ${seat?getSeatColorText(seat):""}`}
-                      onClick={() => seat?.id && IS_SEAT_AVAILABLE(seat)  && handleSelectSeat(seat)}
+                      onClick={() => seat?.seat && IS_SEAT_AVAILABLE(seat) && !IS_SEAT_SELECTED(seat) && handleSelectSeat(seat)}
                     >
                       <div className="relative">
                         {seat?getSeatForType(seat):""}
