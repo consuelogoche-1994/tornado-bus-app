@@ -10,7 +10,7 @@ interface CityOriginState {
 
 const MIN_QUERY_LENGTH = 3;
 const DEFAULT_QUERY_VALUE = '';
-const IS_QUERY_TOO_SHORT_OR_DEFAULT = (query: string) => query === DEFAULT_QUERY_VALUE || query.length < MIN_QUERY_LENGTH;
+const SHOULD_NOT_FILTER_QUERY = (query: string) => query !== DEFAULT_QUERY_VALUE && query.length < MIN_QUERY_LENGTH;
 
 let hasFetched = false;
 
@@ -19,7 +19,7 @@ export const useCityOriginStore = create<CityOriginState>((set) => {
     // Return Early to prevent repeated default fetch
     if (hasFetched && query === DEFAULT_QUERY_VALUE) return;
     // Return Early for short queries
-    if (IS_QUERY_TOO_SHORT_OR_DEFAULT(query)) return;
+    if (SHOULD_NOT_FILTER_QUERY(query)) return;
 
     if (query === DEFAULT_QUERY_VALUE) hasFetched = true;
 
