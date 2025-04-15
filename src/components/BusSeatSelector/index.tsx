@@ -20,9 +20,12 @@ const { selectedTrip } = useSelectedTripStore();
 
 const IS_MAX_SEATS_SELECTED = selectedSeats.length === tripDetail.totalPassengers;
 const IS_SEAT_SELECTED = (seat: Seat) => selectedSeats.some((selectedSeat) => selectedSeat.id === seat.id);
-const IS_SEAT_AVAILABLE = (seat: Seat) => seat.seat > 0 && seat.idStatus === 663;
+const IS_SEAT_AVAILABLE = (seat: Seat) => seat.seat > 0 && seat.idStatus === 663 && seat.isEmpty === 1;
 const IS_SEAT_EMPTY = (seat: Seat) => seat.isEmpty === 0 && seat.seat > 0;
 const IS_SEAT_CHOFER = (seat: Seat) => seat.seat === 0 && seat.icon === "chofer";
+const IS_SEAT_ESCALERA = (seat: Seat) => seat.seat === 0 && seat.icon === "escalera";
+const IS_SEAT_PUERTA = (seat: Seat) => seat.seat === 0 && seat.icon === "puerta";
+const IS_SEAT_WATER = (seat: Seat) => seat.seat === 0 && seat.icon === "water";
 
 const passengerList =
   tripDetail.passengersCount?.flatMap(({ total, ...rest }) =>
@@ -56,20 +59,19 @@ const handleSelectSeat = async (seat: Seat) => {
 };
 
 const getSeatForType = (seat: Seat) => {
-  let content;
-  if(IS_SEAT_EMPTY(seat)) content = <SeatIcon className={`text-[${seat.colorGroup}] cursor-default`} isAvailable={true}/>;
-  if(IS_SEAT_CHOFER(seat)) content = <div className="cursor-default"><UserIcon className="h-6 w-6 text-gray-300" /></div>
-  if(IS_SEAT_AVAILABLE(seat)) content = <SeatIcon className="text-primary cursor-pointer" isAvailable={true}/>;
-  if(IS_SEAT_SELECTED(seat)) content = <SeatIcon className="text-primary cursor-pointer" isAvailable={false} />;
-  return content;
+  if(IS_SEAT_CHOFER(seat)) return <div className="cursor-default"><UserIcon className="h-6 w-6 text-gray-300" /></div>
+  if(IS_SEAT_ESCALERA(seat)) return <div className="cursor-default"><img className="h-6 w-6" src="icons/icon_ladder.svg" alt="escalera"/></div>
+  if(IS_SEAT_PUERTA(seat)) return <div className="cursor-default"><img className="h-6 w-6" src="icons/icon_door.svg" alt="puerta"/></div>
+  if(IS_SEAT_WATER(seat)) return <div className="cursor-default"><img className="h-6 w-6" src="icons/icon_water.svg" alt="water"/></div>
+  if(IS_SEAT_EMPTY(seat)) return <SeatIcon className={`text-[${seat.colorGroup}] cursor-default`} isAvailable={false}/>;
+  if(IS_SEAT_SELECTED(seat)) return <SeatIcon className="text-primary cursor-pointer" isAvailable={false} />;
+  if(IS_SEAT_AVAILABLE(seat)) return <SeatIcon className="text-primary cursor-pointer" isAvailable={true}/>;
 }
 
 const getSeatColorText = (seat: Seat) => {
-  let colorText;
-  if(IS_SEAT_EMPTY(seat)) colorText = `text-[${seat.colorGroup}] cursor-defaul`;
-  if(IS_SEAT_AVAILABLE(seat)) colorText = "text-primary cursor-pointer";
-  if(IS_SEAT_SELECTED(seat)) colorText = "text-white cursor-pointer";
-  return colorText;
+  if(IS_SEAT_EMPTY(seat)) return `text-white cursor-defaul`;
+  if(IS_SEAT_SELECTED(seat)) return "text-white cursor-defaul";
+  if(IS_SEAT_AVAILABLE(seat)) return "text-primary cursor-pointer";
 }
 
   return (
@@ -100,7 +102,7 @@ const getSeatColorText = (seat: Seat) => {
                     <div
                       key={`${rowIndex}-${colIndex}`}
                       className={`w-10 h-10 flex items-center justify-center ${seat?getSeatColorText(seat):""}`}
-                      onClick={() => seat?.id && seat?.seat >0 && seat.idStatus === 663  && handleSelectSeat(seat)}
+                      onClick={() => seat?.id && IS_SEAT_AVAILABLE(seat)  && handleSelectSeat(seat)}
                     >
                       <div className="relative">
                         {seat?getSeatForType(seat):""}
