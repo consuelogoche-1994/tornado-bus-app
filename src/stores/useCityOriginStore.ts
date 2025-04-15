@@ -8,16 +8,20 @@ interface CityOriginState {
   fetchCitiesOrigin: (query?: string) => Promise<void>;
 }
 
+const MIN_QUERY_LENGTH = 3;
+const DEFAULT_QUERY_VALUE = '';
+const IS_QUERY_TOO_SHORT_OR_DEFAULT = (query: string) => query === DEFAULT_QUERY_VALUE || query.length < MIN_QUERY_LENGTH;
+
 let hasFetched = false;
 
 export const useCityOriginStore = create<CityOriginState>((set) => {
   const fetchCitiesOrigin = async (query: string = '') => {
     // Return Early to prevent repeated default fetch
-    if (hasFetched && query === '') return;
+    if (hasFetched && query === DEFAULT_QUERY_VALUE) return;
     // Return Early for short queries
-    if (query !== '' && query.length < 3) return;
+    if (IS_QUERY_TOO_SHORT_OR_DEFAULT(query)) return;
 
-    if (query === '') hasFetched = true;
+    if (query === DEFAULT_QUERY_VALUE) hasFetched = true;
 
     set({ isLoading: true });
     try {

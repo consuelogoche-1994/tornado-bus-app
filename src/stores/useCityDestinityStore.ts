@@ -8,9 +8,13 @@ interface CityDestinityState {
   fetchCitiesDestinity: (cityInitId: number, query: string) => Promise<void>;
 }
 
+const MIN_QUERY_LENGTH = 3;
+const DEFAULT_QUERY_VALUE = "";
+const IS_QUERY_TOO_SHORT_OR_DEFAULT = (query: string) => query === DEFAULT_QUERY_VALUE || query.length < MIN_QUERY_LENGTH;
+
 export const useCityDestinityStore = create<CityDestinityState>((set) => {
   const fetchCitiesDestinity = async (cityInitId: number, query: string = '') => {
-    if (query !== "" && query.length < 3) return;
+    if (IS_QUERY_TOO_SHORT_OR_DEFAULT(query)) return;
     set({ isLoading: true });
 
     try {
