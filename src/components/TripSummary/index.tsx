@@ -4,7 +4,7 @@ import { Seat } from "@/types/seats";
 
 
 interface TripSummaryProps {
-    selectedSeats: Seat[],
+  selectedSeats: Seat[],
 }
 
 const TripSummary = ({ selectedSeats }: TripSummaryProps ) => {

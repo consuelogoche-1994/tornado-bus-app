@@ -26,6 +26,8 @@ function SearchSelect({ id, value, cities, onSelected, onChange, dependencyReset
   const [citySelected, setCitySelected] = useState<number | null>(null);
   const [inputValue, setInputValue] = useState<string >("");
 
+  const IS_VALID_SEARCH = (value: String) => value.length >= 3 || value === "";
+
   useEffect(() => {
     if(dependencyReset && !value) {
       onSelected(null);
@@ -54,7 +56,7 @@ function SearchSelect({ id, value, cities, onSelected, onChange, dependencyReset
    */
   const updateInputValue = (value: string): void => {
     setInputValue(value);
-    if (value.length >= 3 || value === "") {
+    if (IS_VALID_SEARCH(value)) {
       onChange(value);
     }
   };

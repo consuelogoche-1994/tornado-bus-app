@@ -21,9 +21,11 @@ function PassengerType({ value, onChange }: PassengerTypeProps) {
     const { passengerTypes, isLoading } = usePassengersStore();
     const [open, setOpen] = useState(false);
     const [localPassengers, setLocalPassengers] = useState<PassengerCountType[]>([]);
+
+    const HAS_PASSENGERS = value.length > 0;
     
     useEffect(() => {
-      if(value.length > 0){
+      if(HAS_PASSENGERS){
         setLocalPassengers(value);
       }else{
         const updatedPassengers = passengerTypes.map(p => ({

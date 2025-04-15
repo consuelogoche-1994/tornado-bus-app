@@ -18,6 +18,12 @@ const { tripDetail } = useTripDetailsStore();
 const {loading, markSeat } = useMarkSeatStore();
 const { selectedTrip } = useSelectedTripStore();
 
+const IS_MAX_SEATS_SELECTED = selectedSeats.length === tripDetail.totalPassengers;
+const IS_SEAT_SELECTED = (seat: Seat) => selectedSeats.some((selectedSeat) => selectedSeat.id === seat.id);
+const IS_SEAT_AVAILABLE = (seat: Seat) => seat.seat > 0 && seat.idStatus === 663;
+const IS_SEAT_EMPTY = (seat: Seat) => seat.isEmpty === 0 && seat.seat > 0;
+const IS_SEAT_CHOFER = (seat: Seat) => seat.seat === 0 && seat.icon === "chofer";
+
 const passengerList =
   tripDetail.passengersCount?.flatMap(({ total, ...rest }) =>
   Array.from({ length: total }, () => ({
@@ -27,7 +33,7 @@ const passengerList =
 
 
 const handleSelectSeat = async (seat: Seat) => {
-  if (selectedSeats.length === tripDetail.totalPassengers) {
+  if (IS_MAX_SEATS_SELECTED) {
     toast.error(`Solo puedes seleccionar hasta ${tripDetail.totalPassengers} asientos.`);
     return;
   }
@@ -51,20 +57,18 @@ const handleSelectSeat = async (seat: Seat) => {
 
 const getSeatForType = (seat: Seat) => {
   let content;
-  if(seat.isEmpty === 0 && seat.seat > 0) content = <SeatIcon className={`text-[${seat.colorGroup}] cursor-default`} isAvailable={true}/>;
-  if(seat.seat === 0 && seat.icon === "chofer") content = <div className="cursor-default"><UserIcon className="h-6 w-6 text-gray-300" /></div>
-  if(seat.seat > 0 && seat.idStatus === 663) content = <SeatIcon className="text-primary cursor-pointer" isAvailable={true}/>;
-  const isSelected = selectedSeats.some(selectedSeat => selectedSeat.id === seat.id);
-  if (isSelected) content = <SeatIcon className="text-primary cursor-pointer" isAvailable={false} />;
+  if(IS_SEAT_EMPTY(seat)) content = <SeatIcon className={`text-[${seat.colorGroup}] cursor-default`} isAvailable={true}/>;
+  if(IS_SEAT_CHOFER(seat)) content = <div className="cursor-default"><UserIcon className="h-6 w-6 text-gray-300" /></div>
+  if(IS_SEAT_AVAILABLE(seat)) content = <SeatIcon className="text-primary cursor-pointer" isAvailable={true}/>;
+  if(IS_SEAT_SELECTED(seat)) content = <SeatIcon className="text-primary cursor-pointer" isAvailable={false} />;
   return content;
 }
 
 const getSeatColorText = (seat: Seat) => {
   let colorText;
-  if(seat.isEmpty === 0 && seat.seat > 0) colorText = `text-[${seat.colorGroup}] cursor-defaul`;
-  if(seat.seat > 0 && seat.idStatus === 663) colorText = "text-primary cursor-pointer";
-  const isSelected = selectedSeats.some(selectedSeat => selectedSeat.id === seat.id);
-  if(isSelected) colorText = "text-white cursor-pointer";
+  if(IS_SEAT_EMPTY(seat)) colorText = `text-[${seat.colorGroup}] cursor-defaul`;
+  if(IS_SEAT_AVAILABLE(seat)) colorText = "text-primary cursor-pointer";
+  if(IS_SEAT_SELECTED(seat)) colorText = "text-white cursor-pointer";
   return colorText;
 }
 
