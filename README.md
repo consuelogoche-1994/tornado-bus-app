@@ -14,7 +14,7 @@ Esta aplicación fue construida utilizando las siguientes tecnologías:
 - **Tailwind CSS**: Un framework CSS de utilidad que permite construir diseños personalizados directamente en el HTML mediante la aplicación de clases. Acelera el proceso de diseño sin tener que escribir CSS personalizado.
 - **Shadcn UI**: Un conjunto de componentes de interfaz de usuario altamente accesibles y personalizables. Se utiliza para crear elementos modernos y accesibles en la aplicación.
 - **Axios**: Una librería para realizar peticiones HTTP. Se utiliza para comunicar la aplicación con la API y obtener o enviar datos de forma eficiente.
-- **React Context API**: Una forma de manejar el estado global en React. Lo usamos para manejar datos como los asientos seleccionados y la sesión de boletos en varios componentes.
+- **Zustand**: Una librería ligera para manejar estado global en React de forma más sencilla y eficiente que Context API. La usamos para controlar datos como los asientos seleccionados y la sesión de boletos desde cualquier componente, sin necesidad de proveedores (Provider) o árboles anidados..
 - **React Hooks**: Funciones como `useState` y `useEffect` se usan para manejar el estado y los efectos secundarios en los componentes funcionales, haciendo el código más legible y mantenible.
 
 ## ✨ Características
